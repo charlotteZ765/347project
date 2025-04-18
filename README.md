@@ -13,10 +13,12 @@ Why is the approach a good approach compared with other competing methods? For e
 What are the key components of my approach and results? Also, include any specific limitations.
 
 ### Setup: Set up the stage for your experimental results.
-Describe the dataset, including its basic statistics.
-Describe the experimental setup, including what models you are going to run, what parameters you plan to use, and what computing environment you will execute on.
-Describe the problem setup (e.g., for neural networks, describe the network structure that you are going to use in the experiments).
+In this competition our task is to predict whether a passenger was transported to an alternate dimension during the Spaceship Titanic's collision with the spacetime anomaly. From the damaged computer system, we have 8694 entries of train data to predict 4278 passengers' status.
+The datasets contains information about passengers aboard the Spaceship Titanic, with each row representing an individual. It includes identifiers like a unique PassengerId, which can also hint at groupings of travelers. Passengers' origins and destinations are recorded through the HomePlanet and Destination fields, while demographic and personal details such as Age, Name, and VIP status provide insight into who they are. The data also captures whether passengers chose to be in CryoSleep during the voyage and their assigned Cabin location. Additionally, spending behavior is tracked across several onboard amenities like the Spa, Food Court, and VR Deck. The target variable, Transported, indicates whether a passenger was mysteriously transported to another dimension.
 
+To summarize we use TotalSpending for all luxury services, split passagner id and cabinet id to analyze saprately the detailed cabin and group ids. Because in the same group the members usually are from the same family, with group only containing one id, we create new variable TravelingAlone as for if the trevelor is traveling alone or not. 
+
+For this question we are building XGBoosting, Random Forest, and Logistic Regression and analzing with Cross Validation.
 ### Results: Describe the results from your experiments.
 Main results: Describe the main experimental results you have; this is where you highlight the most interesting findings.
 Supplementary results: Describe the parameter choices you have made while running the experiments. This part goes into justifying those choices.
