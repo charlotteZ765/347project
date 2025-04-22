@@ -1,7 +1,7 @@
 # Predicting Transported Passenger Survival on the Spaceship Titanic using Supervised Classification Models
 
 ## Abstract
-#### This project explores the application of supervised classification models to predict passenger outcomes aboard the Spaceship Titanic, a binary classification task from the Kaggle competition. The objective is to determine whether a passenger was “transported” based on demographic, financial, and behavioral features. We implement and compare three models—Logistic Regression, Random Forests, and XGBoost—to evaluate their predictive performance and interpretability. Preprocessing steps include handling missing data, feature encoding, and normalization. Model performance is assessed using cross-validation and metrics such as accuracy, precision, recall, and F1-score. Results highlight the trade-offs between model complexity and interpretability, with XGBoost achieving the highest overall accuracy, while Logistic Regression offers greater transparency in feature influence. Our findings demonstrate the effectiveness of ensemble methods for complex classification tasks and emphasize the importance of model selection in data-driven decision-making.
+This project explores the application of supervised classification models to predict passenger outcomes aboard the Spaceship Titanic, a binary classification task from the Kaggle competition. The objective is to determine whether a passenger was “transported” based on demographic, financial, and behavioral features. We implement and compare three models—Logistic Regression, Random Forests, and XGBoost—to evaluate their predictive performance and interpretability. Preprocessing steps include handling missing data, feature encoding, and normalization. Model performance is assessed using cross-validation and metrics such as accuracy, precision, recall, and F1-score. Results highlight the trade-offs between model complexity and interpretability, with XGBoost achieving the highest overall accuracy, while Logistic Regression offers greater transparency in feature influence. Our findings demonstrate the effectiveness of ensemble methods for complex classification tasks and emphasize the importance of model selection in data-driven decision-making.
 
 ## Documentation
 
@@ -19,9 +19,45 @@ The datasets contains information about passengers aboard the Spaceship Titanic,
 To summarize we use TotalSpending for all luxury services, split passagner id and cabinet id to analyze saprately the detailed cabin and group ids. Because in the same group the members usually are from the same family, with group only containing one id, we create new variable TravelingAlone as for if the trevelor is traveling alone or not. 
 
 For this question we are building XGBoosting, Random Forest, and Logistic Regression and analzing with Cross Validation.
+
 ### Results: Describe the results from your experiments.
 Main results: Describe the main experimental results you have; this is where you highlight the most interesting findings.
 Supplementary results: Describe the parameter choices you have made while running the experiments. This part goes into justifying those choices.
+
+### **Main Results**
+
+We evaluated two classification models — **Logistic Regression** and **Random Forests** — to predict whether passengers were transported. Both models achieved strong and consistent performance:
+
+- **Logistic Regression**  
+  - Validation Accuracy: **77.5%**  
+  - Cross-Validation Accuracy: **77.3% ± 0.0065**  
+  - Consistent results indicate good calibration and generalization.
+
+- **Random Forest**  
+  - Best Cross-Validation Accuracy (tuned): **80.2%**  
+  - Validation Accuracy: **80.16%**  
+  - Outperformed logistic regression by capturing non-linear feature interactions.
+
+While Random Forest achieved higher accuracy, Logistic Regression remained competitive and offers full model interpretability, making it a strong baseline choice.
+
+---
+
+### **Supplementary Results and Parameter Choices**
+
+- **Logistic Regression**
+  - `max_iter = 1000`
+  - `C = 1.0` (default regularization)
+  - Preprocessing:
+    - `PowerTransformer` + `StandardScaler` for numerical features  
+    - `OneHotEncoder` for categorical features
+
+- **Random Forest (via GridSearchCV)**
+  - `n_estimators = 200`
+  - `max_depth = 10`
+  - `min_samples_split = 5`
+  - `min_samples_leaf = 1`
+
+These parameters were selected using 5-fold cross-validation to balance performance and generalization. Limiting tree depth helped reduce overfitting while maintaining strong predictive accuracy.
 
 ### Discussion: Discuss the results obtained above. If your results are very good, see if you could compare them with some existing approaches that you could find online. If your results are not as good as you had hoped for, make a good-faith diagnosis about what the problem is.
 
