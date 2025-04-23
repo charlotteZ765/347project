@@ -59,7 +59,7 @@ While Random Forest achieved higher accuracy, Logistic Regression remained compe
 
 These parameters were selected using 5-fold cross-validation to balance performance and generalization. Limiting tree depth helped reduce overfitting while maintaining strong predictive accuracy.
 
-### Discussion: Discuss the results obtained above. If your results are very good, see if you could compare them with some existing approaches that you could find online. If your results are not as good as you had hoped for, make a good-faith diagnosis about what the problem is.
+### Discussion: The model with the best performance is Random Forest. A future implication of our work is on rescue missions in searching for missing people in ship wrecks or natural disasters.
 
 ### Conclusion: In several sentences, summarize what you have done in this project.
 
