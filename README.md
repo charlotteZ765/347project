@@ -6,11 +6,9 @@ This project explores the application of supervised classification models to pre
 ## Documentation
 
 ### Introduction: Summarize your project report in several paragraphs.
-What is the problem? For example, what are you trying to solve? Describe the motivation.
-Why is this problem interesting? Is this problem helping us solve a bigger task in some way? Where would we find use cases for this problem?
-What is the approach you propose to tackle the problem? What approaches make sense for this problem? Would they work well or not? Feel free to speculate here based on what we taught in class.
-Why is the approach a good approach compared with other competing methods? For example, did you find any reference for solving this problem previously? If there are, how does your approach differ from theirs?
-What are the key components of my approach and results? Also, include any specific limitations.
+In the distant future perhaps the year 2912 the Spaceship Titanic, carrying 13,000 passengers to new exoplanets, collided with a hidden spacetime anomaly near Alpha Centauri. While the ship remained intact, nearly half of its passengers were transported to an alternate dimension, echoing the fate of its legendary namesake. Thus, we would like our project address the problem of helping rescue crews and retrieving the lost passengers. Furthermore, we are attempting to compose an approach to predict which passengers were transported by the anomaly using records recovered from the spaceship’s damaged computer system.   
+
+Thus, the approaches that we are proposing to solve the following problem above are using logistic regression, random forest, and xg boosting. The combination of techniques offers a good trade-off between interpretability, performance, and stability. First, logistic regression provides a simple, interpretable baseline. Second, random forest can handle non-linear relationships and is robust to noisy, missing data, which may be ideal for records with broken ones. Lastly, xg boost offers high prediction accuracy and regularization built in, which makes it ideal for intricate feature interactions and missing values.
 
 ### Setup: Set up the stage for your experimental results.
 In this competition our task is to predict whether a passenger was transported to an alternate dimension during the Spaceship Titanic's collision with the spacetime anomaly. From the damaged computer system, we have 8694 entries of train data to predict 4278 passengers' status.
