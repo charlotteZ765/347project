@@ -5,7 +5,7 @@ This project explores the application of supervised classification models to pre
 
 ## Documentation
 
-### Introduction: Summarize your project report in several paragraphs.
+### Introduction
 In the distant future—perhaps the year 2912—the Spaceship Titanic, a luxury interstellar vessel carrying over 13,000 passengers to newly discovered exoplanets, encountered a hidden spacetime anomaly near Alpha Centauri. Though the ship itself remained intact, nearly half its passengers mysteriously vanished, seemingly transported to an alternate dimension. This project aims to solve a crucial part of that mystery: using recovered records from the ship’s damaged computer system, we seek to predict which passengers were transported. Accurately identifying these individuals would assist interstellar rescue teams in resource allocation and possibly enable the development of anomaly-avoidance protocols for future missions.
 
 The motivation for our project lies in the broader challenge of building robust, interpretable models that can perform well under uncertainty and imperfect data conditions. The Spaceship Titanic dataset simulates real-world scenarios where data may be incomplete, noisy, or corrupted, mirroring challenges in fields such as emergency response, fraud detection, and medical diagnostics. As such, this problem provides a compelling testing ground for machine learning methods that can inform decision-making when stakes are high and data reliability is limited.
@@ -17,12 +17,46 @@ Our approach differs from many existing solutions that often prioritize accuracy
 The key components of our approach include careful preprocessing, meaningful feature engineering (e.g., aggregating spending patterns, extracting cabin and group structure), and standardized evaluation using cross-validation and accuracy metrics. Our results demonstrate that while XGBoost achieves the highest accuracy, logistic regression provides valuable interpretability, and random forest strikes a balance between the two. However, our approach is not without limitations, particularly in the potential for overfitting with more complex models and the challenge of dealing with high-cardinality categorical features. Despite these, our framework offers a principled, flexible methodology for predictive modeling in uncertain environments.
 
 ### Setup: Set up the stage for your experimental results.
-In this competition, our task is to predict whether a passenger was transported to an alternate dimension during the Spaceship Titanic's collision with the spacetime anomaly. From the damaged computer system, we have 8694 entries of train data to predict 4278 passengers.
-The datasets contain information about passengers aboard the Spaceship Titanic, with each row representing an individual. It includes identifiers like a unique PassengerId, which can also hint at groupings of travelers. Passengers' origins and destinations are recorded through the HomePlanet and Destination fields, while demographic and personal details such as Age, Name, and VIP status provide insight into who they are. The data also captures whether passengers chose to be in CryoSleep during the voyage and their assigned Cabin location. Additionally, spending behavior is tracked across several onboard amenities like the Spa, Food Court, and VR Deck. The target variable, Transported, indicates whether a passenger was mysteriously transported to another dimension.
+In this competition, our task is to predict whether a passenger was transported to an alternate dimension during the Spaceship Titanic's collision with the spacetime anomaly. From the damaged computer system (Kaggle dataset), we have two main components: as training set of 8,694 passengers whose transport status is known, and a test set of 4,278 passengers to predict.
 
-To summarize, we use TotalSpending for all luxury services, split passenger ID and cabinet ID to analyze separately the detailed cabin and group IDs. Because in the same group, the members usually are from the same family, with the group only containing one ID, we create a new variable, TravelingAlone, as to whether the traveler is traveling alone or not. 
+The datasets contain information about passengers aboard the Spaceship Titanic, with each row representing an individual. 
 
-For this question, we are building XGBoosting, Random Forest, and Logistic Regression, and analyzing with Cross Validation.
+Here are the key features: 
+- Identifiers: PassengerID - Embeds group information, and Cabin, which reflects physical location on the ship (Deck/Num/Side).
+- Demographics: HomePlanet, Age, and VIP status.
+- Behavioral features: participation in CryoSleep, as well as expenditures in RoomService, FoodCourt, ShoppingMall, Spa, and VRDeck.
+- Travel route: indicated by the Destination.
+- Target variable: Transported, a binary label indicating whether a passenger was mysteriously transported to another dimension.
+
+To enhance model performance, we feature engineered some new variables: 
+- TotalSpending: a composite measure aggregating spending across all onboard services to capture engagement level.
+- Cabin decomposition into CabinDeck, CabinNum, and CabinSide to account for all possible location-based effects.
+- Group extraction from PassengerId to define Group and NumberInGroup.
+- TravelingAlone: A derived binary feature indicating whether the passenger is part of a multi-person group. 
+
+Modeling Approach
+
+We evaluate three classification algorithms:
+	1.	Logistic Regression
+Serves as a simple, interpretable linear baseline.
+	•	Parameters: max_iter=1000, C=1.0 (L2 regularization)
+	2.	Random Forest
+A robust ensemble method capable of capturing non-linear relationships.
+	•	Tuned parameters: n_estimators, max_depth, min_samples_split
+	3.	XGBoost
+A gradient boosting model optimized for performance on tabular data.
+	•	Handles missing values natively and includes built-in regularization
+	•	Tuned parameters: learning_rate, n_estimators, max_depth
+
+All models are trained within a unified scikit-learn Pipeline, which standardizes preprocessing and ensures consistent evaluation:
+	•	Numerical features: Transformed using PowerTransformer and StandardScaler
+	•	Categorical features: Imputed with a constant value and one-hot encoded using OneHotEncoder
+
+### Model #1: Logistic Regression
+
+### Model #2: Random Forest
+
+### Model #3: XG Boost
 
 ### Results: Describe the results from your experiments.
 Main results: Describe the main experimental results you have; this is where you highlight the most interesting findings.
