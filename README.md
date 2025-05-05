@@ -21,22 +21,25 @@ In this competition, our task is to predict whether a passenger was transported 
 
 The datasets contain information about passengers aboard the Spaceship Titanic, with each row representing an individual. 
 
-Here are the key features: 
+#### Key Features
 - Identifiers: PassengerID - Embeds group information, and Cabin, which reflects physical location on the ship (Deck/Num/Side).
 - Demographics: HomePlanet, Age, and VIP status.
 - Behavioral features: participation in CryoSleep, as well as expenditures in RoomService, FoodCourt, ShoppingMall, Spa, and VRDeck.
 - Travel route: indicated by the Destination.
 - Target variable: Transported, a binary label indicating whether a passenger was mysteriously transported to another dimension.
 
-To enhance model performance, we feature engineered some new variables: 
+#### Feature Engineering
 - TotalSpending: a composite measure aggregating spending across all onboard services to capture engagement level.
 - Cabin decomposition into CabinDeck, CabinNum, and CabinSide to account for all possible location-based effects.
 - Group extraction from PassengerId to define Group and NumberInGroup.
 - TravelingAlone: A derived binary feature indicating whether the passenger is part of a multi-person group.
 
 df['Cabin'] = df['Cabin'].fillna("Unknown/0/Unknown")
+
 df['CabinDeck'] = df['Cabin'].str.split('/').str[0].astype('category')
+
 df['CabinNum'] = df['Cabin'].str.split('/').str[1].astype('category')
+
 df['CabinSide'] = df['Cabin'].str.split('/').str[2].astype('category')
 
 df['TotalSpending'] = (
@@ -47,9 +50,14 @@ df['TotalSpending'] = (
         - df['VRDeck'] )
 
 df['Group'] = df['PassengerId'].str.split('_').str[0].astype('category')
+
 df['NumberInGroup'] = df['PassengerId'].str.split('_').str[1].astype('category')
 
-Modeling Approach
+<p align="center">
+  <img src="path/to/9864FB85-EA07-4C2D-99B2-48DE38D397CD.png" alt="Feature Association Plot" width="600">
+</p>
+
+#### Modeling Approaches
 
 We evaluate three classification algorithms:
 	1.	Logistic Regression
@@ -68,6 +76,8 @@ All models are trained within a unified scikit-learn Pipeline, which standardize
 	•	Categorical features: Imputed with a constant value and one-hot encoded using OneHotEncoder
 
 ### Model #1: Logistic Regression
+
+
 
 ### Model #2: Random Forest
 
