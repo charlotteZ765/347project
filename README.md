@@ -53,66 +53,88 @@ df['Group'] = df['PassengerId'].str.split('_').str[0].astype('category')
 
 df['NumberInGroup'] = df['PassengerId'].str.split('_').str[1].astype('category')
 
+<figure style="text-align: center;">
+  <img src="final_images/347img1.png" alt="Feature Association Plot" width="400">
+  <figcaption><em>Figure 1:</em> Feature association with the target variable using correlation and Cramér’s V
+</figure>
+
+
 <p align="center">
-  <img src="path/to/9864FB85-EA07-4C2D-99B2-48DE38D397CD.png" alt="Feature Association Plot" width="600">
+  <figure style="display: inline-block; text-align: center; margin: 0 10px;">
+    <img src="final_images/347img3.png" alt="Image 3" height="180"/>
+    <figcaption><em>Image 3:</em> CryoSleep vs Transported</figcaption>
+  </figure>
+
+  <figure style="display: inline-block; text-align: center; margin: 0 10px;">
+    <img src="final_images/347img4.png" alt="Image 4" height="180"/>
+    <figcaption><em>Image 4:</em> VIP Status Distribution</figcaption>
+  </figure>
+
+  <figure style="display: inline-block; text-align: center; margin: 0 10px;">
+    <img src="final_images/347img2.png" alt="Image 2" height="180"/>
+    <figcaption><em>Image 2:</em> Spending vs Transported</figcaption>
+  </figure>
 </p>
 
-#### Modeling Approaches
+### Modeling Approaches
 
-We evaluate three classification algorithms:
-	1.	Logistic Regression
+We evaluate 3 classification algorithms:
+
+**1. Logistic Regression**
 Serves as a simple, interpretable linear baseline.
-	•	Parameters: max_iter=1000, C=1.0 (L2 regularization)
-	2.	Random Forest
+- Parameters: max_iter=1000, C=1.0 (L2 regularization)
+
+**2. Random Forest**
 A robust ensemble method capable of capturing non-linear relationships.
-	•	Tuned parameters: n_estimators, max_depth, min_samples_split
-	3.	XGBoost
+- Tuned parameters: n_estimators, max_depth, min_samples_split
+
+**3. XGBoost**
 A gradient boosting model optimized for performance on tabular data.
-	•	Handles missing values natively and includes built-in regularization
-	•	Tuned parameters: learning_rate, n_estimators, max_depth
+- Handles missing values natively and includes built-in regularization
+- Tuned parameters: learning_rate, n_estimators, max_depth
 
 All models are trained within a unified scikit-learn Pipeline, which standardizes preprocessing and ensures consistent evaluation:
-	•	Numerical features: Transformed using PowerTransformer and StandardScaler
-	•	Categorical features: Imputed with a constant value and one-hot encoded using OneHotEncoder
+- Numerical features: Transformed using PowerTransformer and StandardScaler
+- Categorical features: Imputed with a constant value and one-hot encoded using OneHotEncoder
 
-### Model #1: Logistic Regression
+#### Model #1: Logistic Regression
 
+#### Model #2: Random Forest
 
+#### Model #3: XG Boost
 
-### Model #2: Random Forest
+### Results
 
-### Model #3: XG Boost
-
-### Results: Describe the results from your experiments.
-Main results: Describe the main experimental results you have; this is where you highlight the most interesting findings.
-Supplementary results: Describe the parameter choices you have made while running the experiments. This part goes into justifying those choices.
-
-### **Main Results**
-
-We evaluated two classification models — **Logistic Regression** and **Random Forests** — to predict whether passengers were transported. Both models achieved strong and consistent performance:
+#### **Main Results**
+We evaluated three supervised classification models — **Logistic Regression**, **Random Forest**, and **XGBoost** — to predict whether passengers aboard the Spaceship Titanic were transported to another dimension. All models demonstrated strong generalization performance under 5-fold cross-validation, with XGBoost outperforming the others on the validation set:
 
 - **Logistic Regression**  
-  - Validation Accuracy: **77.5%**  
   - Cross-Validation Accuracy: **77.3% ± 0.0065**  
-  - Consistent results indicate good calibration and generalization.
+  - Validation Accuracy: **77.5%**  
+  - Despite its simplicity, logistic regression achieved reliable performance and serves as a highly interpretable baseline.
 
 - **Random Forest**  
-  - Best Cross-Validation Accuracy (tuned): **80.2%**  
+  - Best Cross-Validation Accuracy: **80.2%**  
   - Validation Accuracy: **80.16%**  
-  - Outperformed logistic regression by capturing non-linear feature interactions.
+  - Able to capture non-linearities and variable interactions, Random Forest consistently outperformed logistic regression.
 
-While Random Forest achieved higher accuracy, Logistic Regression remained competitive and offers full model interpretability, making it a strong baseline choice.
-
+- **XGBoost**
+  - Best Cross-Validation Accuracy: **80.04% ± 0.00107**
+  - Validation Accuracy: **84.36%**
+  - Achieved the highest validation accuracy, suggesting superior generalization. XGBoost's ability to model complex feature interactions with regularization led to the most accurate predictions.
+ 
 ---
 
-### **Supplementary Results and Parameter Choices**
+#### **Supplementary Results and Parameter Choices**
+
+Each model was tuned using appropriate hyperparameters and preprocessing strategies: 
 
 - **Logistic Regression**
   - `max_iter = 1000`
-  - `C = 1.0` (default regularization)
+  - `C = 1.0` (default L2 regularization)
   - Preprocessing:
-    - `PowerTransformer` + `StandardScaler` for numerical features  
-    - `OneHotEncoder` for categorical features
+    - Numerical: `PowerTransformer` → `StandardScaler`  
+    - Categorical: `OneHotEncoder`
 
 - **Random Forest (via GridSearchCV)**
   - `n_estimators = 200`
@@ -120,7 +142,13 @@ While Random Forest achieved higher accuracy, Logistic Regression remained compe
   - `min_samples_split = 5`
   - `min_samples_leaf = 1`
 
-These parameters were selected using 5-fold cross-validation to balance performance and generalization. Limiting tree depth helped reduce overfitting while maintaining strong predictive accuracy.
+- **XGBoost (via GridSearchCV)**
+  - `n_estimators = 200`
+  - `max_depth = 3`
+  - `learning_rate = 0.2`
+  - `subsample = 1.0`
+
+These parameters were selected through 5-fold cross-validation to balance performance (bias) and generalization (variance). Notably, limiting tree depth in XGBoost and adjusting learning rate allowed for better regularization, helping it outperform Random Forest despite similar CV scores. 
 
 ### Conclusion: 
 In this project, we tackled the challenge of predicting whether passengers aboard the Spaceship Titanic were transported, a binary classification problem from a Kaggle competition. Using a dataset of demographic, behavioral, and financial features, we applied and compared Logistic Regression, Random Forest, and XGBoost models. Extensive preprocessing, including missing value imputation, feature transformation, and encoding, was critical to our pipeline.
