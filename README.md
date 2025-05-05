@@ -17,7 +17,7 @@ Our approach differs from many existing solutions that often prioritize accuracy
 The key components of our approach include careful preprocessing, meaningful feature engineering (e.g., aggregating spending patterns, extracting cabin and group structure), and standardized evaluation using cross-validation and accuracy metrics. Our results demonstrate that while XGBoost achieves the highest accuracy, logistic regression provides valuable interpretability, and random forest strikes a balance between the two. However, our approach is not without limitations, particularly in the potential for overfitting with more complex models and the challenge of dealing with high-cardinality categorical features. Despite these, our framework offers a principled, flexible methodology for predictive modeling in uncertain environments.
 
 ### Setup: Set up the stage for your experimental results.
-In this competition, our task is to predict whether a passenger was transported to an alternate dimension during the Spaceship Titanic's collision with the spacetime anomaly. From the damaged computer system (Kaggle dataset), we have two main components: as training set of 8,694 passengers whose transport status is known, and a test set of 4,278 passengers to predict.
+In this competition, our task is to predict whether a passenger was transported to an alternate dimension during the Spaceship Titanic's collision with the spacetime anomaly. From the damaged computer system (Kaggle dataset), we have two main components: a training set of 8,694 passengers whose transport status is known, and a test set of 4,278 passengers to predict.
 
 The datasets contain information about passengers aboard the Spaceship Titanic, with each row representing an individual. 
 
@@ -32,7 +32,22 @@ To enhance model performance, we feature engineered some new variables:
 - TotalSpending: a composite measure aggregating spending across all onboard services to capture engagement level.
 - Cabin decomposition into CabinDeck, CabinNum, and CabinSide to account for all possible location-based effects.
 - Group extraction from PassengerId to define Group and NumberInGroup.
-- TravelingAlone: A derived binary feature indicating whether the passenger is part of a multi-person group. 
+- TravelingAlone: A derived binary feature indicating whether the passenger is part of a multi-person group.
+
+df['Cabin'] = df['Cabin'].fillna("Unknown/0/Unknown")
+df['CabinDeck'] = df['Cabin'].str.split('/').str[0].astype('category')
+df['CabinNum'] = df['Cabin'].str.split('/').str[1].astype('category')
+df['CabinSide'] = df['Cabin'].str.split('/').str[2].astype('category')
+
+df['TotalSpending'] = (
+	+ df['FoodCourt']
+        + df['ShoppingMall']
+        + df['RoomService']
+        - df['Spa']
+        - df['VRDeck'] )
+
+df['Group'] = df['PassengerId'].str.split('_').str[0].astype('category')
+df['NumberInGroup'] = df['PassengerId'].str.split('_').str[1].astype('category')
 
 Modeling Approach
 
