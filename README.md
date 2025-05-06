@@ -3,6 +3,7 @@
 #### QTM 347 Final Project
 #### Team Members: Joyce Chen, Ryan Paik, Heyi Yang, Charlotte Zhao
 #### Data Source: https://www.kaggle.com/competitions/spaceship-titanic
+#### Final Presentation Slides: https://www.figma.com/slides/KUwBVM5JqRcsdHktBC81Ek/QTM347-Project?node-id=195-71&t=g56ZEZevNkbWl1mv-1
 
 ## Abstract
 This project explores the application of supervised classification models to predict passenger outcomes aboard the Spaceship Titanic, a binary classification task from the Kaggle competition. The objective is to determine whether a passenger was “transported” based on demographic, financial, and behavioral features. We implement and compare three models—Logistic Regression, Random Forests, and XGBoost—to evaluate their predictive performance and interpretability. Preprocessing steps include handling missing data, feature encoding, and normalization. Model performance is assessed using cross-validation and metrics such as accuracy, precision, recall, and F1-score. Results highlight the trade-offs between model complexity and interpretability, with XGBoost achieving the highest overall accuracy, while Logistic Regression offers greater transparency in feature influence. Our findings demonstrate the effectiveness of ensemble methods for complex classification tasks and emphasize the importance of model selection in data-driven decision-making.
