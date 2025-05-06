@@ -24,22 +24,20 @@ The key components of our approach include careful preprocessing, meaningful fea
 ---
 
 ## Setup
-In this competition, our task is to predict whether a passenger was transported to an alternate dimension during the Spaceship Titanic's collision with the spacetime anomaly. From the damaged computer system (Kaggle dataset), we have two main components: a training set of 8,694 passengers whose transport status is known, and a test set of 4,278 passengers to predict.
-
-The datasets contain information about passengers aboard the Spaceship Titanic, with each row representing an individual. 
+In this competition, our task is to predict whether a passenger was transported to an alternate dimension during the Spaceship Titanic's collision with the spacetime anomaly. From the damaged computer system (Kaggle dataset), we have two main components: a training set of 8,694 passengers whose transport status is known, and a test set of 4,278 passengers to predict. The datasets contain information about passengers aboard the Spaceship Titanic, with each row representing an individual. 
 
 ### Key Features
-- Identifiers: PassengerID - Embeds group information, and Cabin, which reflects physical location on the ship (Deck/Num/Side).
-- Demographics: HomePlanet, Age, and VIP status.
-- Behavioral features: participation in CryoSleep, as well as expenditures in RoomService, FoodCourt, ShoppingMall, Spa, and VRDeck.
-- Travel route: indicated by the Destination.
-- Target variable: Transported, a binary label indicating whether a passenger was mysteriously transported to another dimension.
+- Identifiers: PassengerID - Embeds group information, and Cabin, which reflects physical location on the ship (Deck/Num/Side)
+- Demographics: HomePlanet, Age, and VIP status
+- Behavioral features: participation in CryoSleep, as well as expenditures in RoomService, FoodCourt, ShoppingMall, Spa, and VRDeck
+- Travel route: indicated by the Destination
+- Target variable: Transported, a binary label indicating whether a passenger was mysteriously transported to another dimension
 
 ### Feature Engineering
-- TotalSpending: a composite measure aggregating spending across all onboard services to capture engagement level.
-- Cabin decomposition into CabinDeck, CabinNum, and CabinSide to account for all possible location-based effects.
-- Group extraction from PassengerId to define Group and NumberInGroup.
-- TravelingAlone: A derived binary feature indicating whether the passenger is part of a multi-person group.
+- TotalSpending: a composite measure aggregating spending across all onboard services to capture engagement level
+- Cabin decomposition into CabinDeck, CabinNum, and CabinSide to account for all possible location-based effects
+- Group extraction from PassengerId to define Group and NumberInGroup
+- TravelingAlone: A derived binary feature indicating whether the passenger is part of a multi-person group
 
 `df['Cabin'] = df['Cabin'].fillna("Unknown/0/Unknown")`
 
@@ -55,7 +53,7 @@ The datasets contain information about passengers aboard the Spaceship Titanic, 
         + df['RoomService']
         - df['Spa']
         - df['VRDeck'] )`
-
+	
 `df['Group'] = df['PassengerId'].str.split('_').str[0].astype('category')`
 
 `df['NumberInGroup'] = df['PassengerId'].str.split('_').str[1].astype('category')`
@@ -87,7 +85,7 @@ The datasets contain information about passengers aboard the Spaceship Titanic, 
 
 ## Modeling Approaches
 
-We evaluate 3 classification algorithms:
+We evaluate 3 classification models:
 
 **1. Logistic Regression**
 Serves as a simple, interpretable linear baseline.
