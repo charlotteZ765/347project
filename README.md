@@ -1,4 +1,4 @@
-# Surviving the Spaceship Titanic 🚀🚢
+# Predicting Passenger Survival on the Spaceship Titanic 🚀🚢
 
 #### QTM 347 Final Project
 #### Team Members: Joyce Chen, Ryan Paik, Heyi Yang, Charlotte Zhao
@@ -39,47 +39,34 @@ In this competition, our task is to predict whether a passenger was transported 
 - Group extraction from PassengerId to define Group and NumberInGroup
 - TravelingAlone: A derived binary feature indicating whether the passenger is part of a multi-person group
 
-`df['Cabin'] = df['Cabin'].fillna("Unknown/0/Unknown")`
-
-`df['CabinDeck'] = df['Cabin'].str.split('/').str[0].astype('category')`
-
-`df['CabinNum'] = df['Cabin'].str.split('/').str[1].astype('category')`
-
-`df['CabinSide'] = df['Cabin'].str.split('/').str[2].astype('category')`
-
-`df['TotalSpending'] = (
-	+ df['FoodCourt']
-        + df['ShoppingMall']
-        + df['RoomService']
-        - df['Spa']
-        - df['VRDeck'] )`
-	
-`df['Group'] = df['PassengerId'].str.split('_').str[0].astype('category')`
-
-`df['NumberInGroup'] = df['PassengerId'].str.split('_').str[1].astype('category')`
-
-<figure style="text-align: center;">
-  <img src="final_images/347img1.png" alt="Feature Association Plot" width="400">
-  <figcaption><em>Figure 1:</em> Feature association with the target variable using correlation and Cramér’s V
-</figure>
-
+### Data Exploration
 
 <p align="center">
-  <figure style="display: inline-block; text-align: center; margin: 0 10px;">
-    <img src="final_images/347img3.png" alt="Image 3" height="180"/>
-    <figcaption><em>Image 3:</em> CryoSleep vs Transported</figcaption>
-  </figure>
-
-  <figure style="display: inline-block; text-align: center; margin: 0 10px;">
-    <img src="final_images/347img4.png" alt="Image 4" height="180"/>
-    <figcaption><em>Image 4:</em> VIP Status Distribution</figcaption>
-  </figure>
-
-  <figure style="display: inline-block; text-align: center; margin: 0 10px;">
-    <img src="final_images/347img2.png" alt="Image 2" height="180"/>
-    <figcaption><em>Image 2:</em> Spending vs Transported</figcaption>
-  </figure>
+  <img src="final_images/347img3.png" alt="Image 3" height="150"/>
+  <img src="final_images/347img4.png" alt="Image 4" height="150"/>
+  <img src="final_images/347img2.png" alt="Image 2" height="150"/>
 </p>
+
+Figure 1: Age Distribution of Passengers
+The age distribution is right-skewed, with a concentration of passengers in the 20–30 age range. This suggests a relatively young traveler population. From a feature engineering perspective, age might correlate with passenger behavior (e.g., CryoSleep participation or spending). We may also consider creating age bands (e.g., youth, adult, senior) to capture non-linear effects and reduce model noise.
+
+Figure 2: Total Spending Distribution Among Passengers
+The total spending is heavily centered at zero, indicating many passengers spent nothing, possibly due to being in CryoSleep. The long tails reflect a few high spenders. This variable is informative but skewed; transformations (e.g., log or power) may improve model performance. We also engineered this feature as a composite of multiple spending categories, making it a valuable summary indicator of onboard activity.
+
+Figure 3: Passenger Transport Status by HomePlanet
+HomePlanet is a strong categorical feature with clear class separation. Passengers from Europa show a higher proportion of being transported than those from Earth. This suggests underlying planet-based heterogeneity in outcomes, making HomePlanet a crucial input to model classification. One-hot encoding this feature preserves this discriminatory power.
+
+### Association Analysis
+
+<figure style="text-align: center;">
+  <img src="final_images/347img1.png" alt="Feature Association Plot" width="300">
+</figure>
+
+This plot informs our feature selection strategy by quantifying the relationship between each engineered feature and the target variable Transported. The strongest associations are observed with Group, CabinNum, and CryoSleep, validating the decision to engineer features such as group identifiers (Group, NumberInGroup), cabin decomposition (CabinDeck, CabinSide, CabinNum), and binary indicators like CryoSleep and TravelingAlone.
+
+Features like RoomService, Spa, and VRDeck display low or even negative associations, suggesting that raw spending variables may offer limited predictive value. This insight reinforces the need to either transform these features (e.g., via total or normalized spending) or deprioritize them during feature selection.
+
+Overall, the figure supports the inclusion of spatial, behavioral, and grouping-based features in our final model pipeline, while guiding regularization or dimensionality reduction for weaker variables.
 
 ---
 
