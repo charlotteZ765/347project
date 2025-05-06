@@ -59,7 +59,7 @@ HomePlanet is a strong categorical feature with clear class separation. Passenge
 ### Association Analysis
 
 <figure style="text-align: center;">
-  <img src="final_images/347img1.png" alt="Feature Association Plot" width="300">
+  <img src="final_images/347img1.png" alt="Image 1" width="300">
 </figure>
 
 This plot informs our feature selection strategy by quantifying the relationship between each engineered feature and the target variable Transported. The strongest associations are observed with Group, CabinNum, and CryoSleep, validating the decision to engineer features such as group identifiers (Group, NumberInGroup), cabin decomposition (CabinDeck, CabinSide, CabinNum), and binary indicators like CryoSleep and TravelingAlone.
@@ -93,9 +93,54 @@ All models are trained within a unified scikit-learn Pipeline, which standardize
 
 ### Model #1: Logistic Regression
 
+<figure style="text-align: center;">
+  <img src="final_images/347img5.png" alt="Image 5" width="300">
+</figure>
+
+This plot displays the 20 most influential features in the logistic regression model based on their coefficient magnitudes, indicating their effect on the log-odds of a passenger being transported.
+
+Key Positive Predictors (Green Bars):
+
+num__TotalSpending is the strongest positive predictor, suggesting that passengers who spent more on onboard services were significantly more likely to be transported.
+Categorical indicators such as CryoSleep_True, HomePlanet_Europa, and cabins on decks C, B, and F are also associated with a higher likelihood of transportation. These may proxy for lifestyle or class-related factors onboard.
+Key Negative Predictors (Red Bars):
+
+CryoSleep_False is the most negative predictor, consistent with the positive effect of being in CryoSleep. This reinforces its importance in the model.
+Spending-related features such as RoomService, Spa, and VRDeck have negative coefficients—likely because they are inversely related to CryoSleep status (i.e., sleepers do not spend).
+Other negative contributors include passengers from Earth and Mars and those in CabinDecks A and G, suggesting some location and origin effects.
+
+This plot provides strong interpretability benefits, revealing that behavioral (spending, CryoSleep), geographic (HomePlanet), and locational (CabinDeck) features drive logistic model predictions. It also highlights feature redundancy (e.g., both CryoSleep_True and CryoSleep_False appear), which is useful for understanding the symmetric nature of one-hot encoded features.
+
 ### Model #2: Random Forest
 
+<figure style="text-align: center;">
+  <img src="final_images/347img6.png" alt="Image 6" width="300">
+</figure>
+
+This figure presents one representative decision tree from the tuned random forest model, illustrating how the ensemble makes classification decisions based on engineered features.
+
+The root node split is based on CryoSleep_False, confirming CryoSleep status as a primary predictor. Passengers not in CryoSleep are initially more likely not transported, consistent with logistic regression insights.
+The left subtree (CryoSleep = True) quickly identifies CabinDeck B, VIP status, and HomePlanet as discriminative features. For instance, being not on Deck B and not a VIP leads to strong prediction of being transported.
+The right subtree (CryoSleep = False) splits on Spa spending, Age, and TotalSpending, capturing behavioral patterns of non-sleeping passengers. Higher spending and age appear linked to non-transportation.
+Leaf nodes show strong purity (low Gini), especially where features like Destination = TRAPPIST-1e, CabinDeck C, or TravelingAlone are decisive.
+
+This tree highlights how random forests leverage both categorical splits (e.g., VIP status, HomePlanet) and numerical thresholds (e.g., TotalSpending > 2.37) to form interpretable, hierarchical rules. These interactions are especially powerful in structured data like this. Importantly, this visualization confirms the importance of features already identified during feature engineering—especially CryoSleep, Cabin location, and spending—validating their role in final model decisions.
+
 ### Model #3: XG Boost
+
+<figure style="text-align: center;">
+  <img src="final_images/347img7.png" alt="Image 7" width="300">
+</figure>
+
+This plot illustrates the top 10 features ranked by their average information gain in the XGBoost model, highlighting the variables that most improved model performance when used for splits.
+
+CryoSleep_False overwhelmingly dominates as the most important feature, confirming that a passenger not in CryoSleep is a strong indicator of not being transported.
+HomePlanet_Earth and HomePlanet_Europa follow, suggesting the passenger’s origin plays a significant role in their transport likelihood—likely due to differing population traits or behaviors.
+CabinSide_S also contributes meaningfully, reinforcing spatial location aboard the ship as a predictive feature.
+Spending-related variables like RoomService, TotalSpending, and Spa appear prominently, indicating that passenger engagement with onboard amenities relates to transport status.
+The inclusion of CabinDeck_F and CabinDeck_E implies that deck-level information helps refine predictions, likely due to location-based differences in exposure to the anomaly.
+
+XGBoost’s reliance on behavioral features (e.g., spending), spatial indicators (e.g., cabin location), and CryoSleep status suggests that it captures both individual activity patterns and environmental context. These findings validate earlier feature engineering choices and support their inclusion in all model pipelines. The gain metric here emphasizes not just frequency of use, but how impactful the feature was in reducing classification error.
 
 ---
 
@@ -118,7 +163,20 @@ We evaluated three supervised classification models — **Logistic Regression**,
   - Best Cross-Validation Accuracy: **80.04% ± 0.00107**
   - Validation Accuracy: **84.36%**
   - Achieved the highest validation accuracy, suggesting superior generalization. XGBoost's ability to model complex feature interactions with regularization led to the most accurate predictions.
- 
+
+- **Classification Metrics**
+<figure style="text-align: center;">
+  <img src="final_images/347img9.png" alt="Image 9" width="500">
+</figure>
+
+Accuracy Trends:
+- XGBoost achieves the highest accuracy at 0.84, followed by Random Forest (0.80) and Logistic Regression (0.77). This confirms that more complex, non-linear models better capture the underlying structure in the dataset.
+
+Class-Wise Performance:
+- All models show balanced performance across the two classes ("Not Transported" and "Transported"). XGBoost slightly favors "Transported" predictions, with higher recall (0.86) and f1-score (0.85) for that class. Logistic Regression, while the simplest, still maintains strong baseline metrics and is likely more interpretable.
+
+Model Preference:
+- XGBoost should be preferred if prediction accuracy is the priority. Random Forest provides strong performance with less tuning and better interpretability than XGBoost. Logistic Regression is best when explainability and computational efficiency are crucial.
 
 ### **Supplementary Results and Parameter Choices**
 
@@ -150,13 +208,16 @@ These parameters were selected through 5-fold cross-validation to balance perfor
 ## Conclusion: 
 In this project, we tackled the challenge of predicting whether passengers aboard the Spaceship Titanic were transported, a binary classification problem from a Kaggle competition. Using a dataset of demographic, behavioral, and financial features, we applied and compared Logistic Regression, Random Forest, and XGBoost models. Extensive preprocessing, including missing value imputation, feature transformation, and encoding, was critical to our pipeline.
 
-After evaluation using metrics like accuracy and cross-validation scores, Random Forest was identified as the best-performing model, balancing performance and robustness. Our findings not only highlight the importance of ensemble methods for complex datasets but also showcase how thoughtful feature engineering and model selection can lead to meaningful insights in predictive analytics. This work sets the stage for broader applications in domains requiring rapid, high-stakes decision-making based on passenger or personnel data.
+To evaluate the task, we implemented and compared three models: Logistic Regression, Random Forest, and XGBoost. While Logistic Regression provided a strong interpretable baseline, the ensemble-based models demonstrated superior performance. Ultimately, XGBoost emerged as the top performer, achieving the highest accuracy and F1-scores across both classes. Our results emphasize the effectiveness of tree-based ensemble methods in handling structured, feature-rich datasets.
+
+This study underscores the value of careful feature engineering, model tuning, and comparative evaluation in predictive modeling tasks. Beyond the competition context, the approach outlined here can be extended to real-world domains such as transportation, security screening, or emergency triage—any setting where timely and accurate classification of individuals is essential.
 
 ---
 
 ## Discussion: 
+Even though our models achieved relatively strong predictive performance, there were definitely some limitations to our approcahes and areas for future improvement. Regarding some basic data assumptions, there was a large portion of the dataset which had missing values, specifically in key features like Age, Cabin, and other spending-related categories. Despite the imputation techniques we used in preprocessing, it may not have been able to fully capture necessary patterns. A plausible fix for this in future work could be to implement more advanced imputation methods such as iterative imputation or deep generative models. Another notable drawback was the redundancy with some of our features. When it came to correlation, there could have been collinearity between original variables and the derived features (e.g., TravelingAlone, TotalSpending). Not to mention, the dataset lacked overall contextual order as the topic is quite abstract and not necessarily applicable to a super realistic setting. 
 
-The implications of our work extend beyond this specific dataset. The modeling techniques and feature engineering strategies used here can be adapted for real-world scenarios, particularly in emergency response or rescue operations. For example, similar models could assist in identifying missing individuals following natural disasters or shipwrecks by learning from structured passenger data. The ability to rapidly and accurately predict survival likelihoods could support prioritization in rescue missions, ultimately saving lives.
+However, we still believe the implications of our work extend beyond this specific dataset. The modeling techniques and feature engineering strategies used here can be adapted for real-world scenarios, particularly in emergency response or rescue operations. For example, similar models could assist in identifying missing individuals following natural disasters or shipwrecks by learning from structured passenger data. The ability to rapidly and accurately predict survival likelihoods could support prioritization in rescue missions, ultimately saving lives.
 
 ---
 
