@@ -143,7 +143,7 @@ This figure shows the top 10 features ranked by their average information gain i
 ## Results
 
 ### **Main Results**
-We evaluated three supervised classification models — **Logistic Regression**, **Random Forest**, and **XGBoost** — to predict whether passengers aboard the Spaceship Titanic were transported to another dimension. All models demonstrated strong generalization performance under 5-fold cross-validation, with XGBoost outperforming the others on the validation set:
+We evaluated three supervised classification models — **Logistic Regression**, **Random Forest**, and **XGBoost** — to predict whether passengers aboard the Spaceship Titanic were transported to another dimension. See file submission for the list of predicted passengers being transported. All models demonstrated strong generalization performance under 5-fold cross-validation, with XGBoost outperforming the others on the validation set:
 
 - **Logistic Regression**  
   - Cross-Validation Accuracy: **77.3% ± 0.0065**  
